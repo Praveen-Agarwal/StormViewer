@@ -17,6 +17,10 @@ class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Storm Viewer"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         let fm = FileManager.default
         let path = Bundle.main.resourcePath! // No issue here with exclamation mark as for iOS apps this will always have a path.
         let items = try! fm.contentsOfDirectory(atPath: path)
@@ -24,6 +28,7 @@ class ViewController: UITableViewController {
         for item in items where item.hasPrefix("nssl") {
             pictures.append(item)
         }
+        pictures.sort()
         print(pictures)
     }
     
@@ -35,6 +40,13 @@ class ViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Picture", for: indexPath)
         cell.textLabel?.text = pictures[indexPath.row]
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController else { return }
+        detailVC.selectedImage = pictures[indexPath.row]
+        detailVC.index = (index: indexPath.row + 1, count: pictures.count)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

@@ -21,10 +21,8 @@ class ViewController: UITableViewController {
         let path = Bundle.main.resourcePath! // No issue here with exclamation mark as for iOS apps this will always have a path.
         let items = try! fm.contentsOfDirectory(atPath: path)
         // Here as well its safe to use try! as this path must have contents otherwise our app is already in some fundamental problem.
-        for item in items {
-            if item.hasPrefix("nssl") {
-                pictures.append(item)
-            }
+        for item in items where item.hasPrefix("nssl") {
+            pictures.append(item)
         }
         print(pictures)
     }
